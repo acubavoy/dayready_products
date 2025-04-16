@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario de Pedido</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      background-color: #f3f3f3;
+    }
+    h2 { color: #c40052; }
+    .section {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    #productosSeleccionados {
+      background-color: #e6f7ff;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #0077cc;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Formulario de Pedido</h2>
+
+  <div class="section" id="productosSeleccionados">
+    <h3>Productos Seleccionados:</h3>
+    <ul id="listaProductos"></ul>
+  </div>
+
+  <form id="pedidoForm">
+    <div class="section">
+      <h3>Información del Comprador</h3>
+      <label>Nombre: <input type="text" name="comprador_nombre" required></label>
+      <label>Apellidos: <input type="text" name="comprador_apellidos" required></label>
+      <label>Teléfono: <input type="text" name="comprador_telefono" required></label>
+      <label>Email: <input type="email" name="comprador_email" required></label>
+      <label>Código Postal: <input type="text" name="comprador_codigo_postal"></label>
+    </div>
+
+    <div class="section">
+      <h3>Información del Receptor</h3>
+      <label>Nombre: <input type="text" name="receptor_nombre" required></label>
+      <label>Apellidos: <input type="text" name="receptor_apellidos" required></label>
+      <label>Dirección completa: <input type="text" name="receptor_direccion" required></label>
+      <label>Teléfono: <input type="text" name="receptor_telefono" required></label>
+      <label>Carnet de Identidad: <input type="text" name="receptor_carnet" required></label>
+      <label>¿Puede ser contactado por WhatsApp?
+        <select name="receptor_whatsapp">
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="section">
+      <h3>Forma de Pago</h3>
+      <label><input type="radio" name="forma_pago" value="Pago Cash" required> Pago Cash</label>
+      <label><input type="radio" name="forma_pago" value="Depósito bancario"> Depósito bancario</label>
+      <label><input type="radio" name="forma_pago" value="Zelle"> Pago por Zelle</label>
+      <label class="disabled"><input type="radio" disabled> Pago por Tarjeta de Crédito</label>
+      <label class="disabled"><input type="radio" disabled> Pago por Paypal</label>
+    </div>
+
+    <input type="hidden" name="order_id" id="order_id">
+
+    <button type="submit">Enviar Pedido</button>
+  </form>
+
+  <script>
+    (function() {
+      emailjs.init("service_g9u6zbj");
+
+      // 1. Mostrar productos seleccionados
+      const productos = JSON.parse(localStorage.getItem("productos")) || [];
+      const lista = document.getElementById("listaProductos");
+      productos.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = p.sku + " - " + p.nombre;
+        lista.appendChild(li);
+      });
+
+      // 2. Generar número de orden único
+      function generarOrdenID() {
+        const fecha = new Date();
+        const yyyy = fecha.getFullYear();
+        const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dd = String(fecha.getDate()).padStart(2, '0');
+        const hh = String(fecha.getHours()).padStart(2, '0');
+        const min = String(fecha.getMinutes()).padStart(2, '0');
+        const rand = Math.floor(100 + Math.random() * 900);
+        return `ACV-${yyyy}${mm}${dd}-${hh}${min}-${rand}`;
+      }
+      const ordenID = generarOrdenID();
+      document.getElementById("order_id").value = ordenID;
+
+      // 3. Enviar formulario
+      document.getElementById("pedidoForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const form = this;
+        const formData = new FormData(form);
+        const productoInfo = productos.map(p => `${p.sku} - ${p.nombre}`).join(", ");
+        formData.append("productos", productoInfo);
+        formData.append("order_id", ordenID);
+
+        emailjs.send("default_service", "template_ue25xsa", Object.fromEntries(formData))
+          .then(() => {
+            alert(`¡Gracias! Su pedido fue enviado con el número: ${ordenID}`);
+            form.reset();
+            localStorage.removeItem("productos");
+            window.location.href = "productos.html";
+          }, (err) => {
+            alert("Error al enviar el pedido. Intente nuevamente.");
+            console.error(err);
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
