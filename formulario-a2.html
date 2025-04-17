@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,56 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Formulario de Pedido</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { color: #333; margin-top: 0; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
-    .radio-group label { display: block; font-weight: normal; margin-top: 10px; }
-    button { margin-top: 20px; background-color: #007bff; color: white; padding: 12px; border: none; border-radius: 5px; width: 100%; cursor: pointer; }
-    button:hover { background-color: #0056b3; }
-    .disabled { opacity: 0.5; pointer-events: none; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 1em;
+      background-color: #f9f9f9;
+    }
+    form {
+      background-color: #fff;
+      padding: 1.5em;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      color: #1a73e8;
+      margin-top: 1.5em;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 1em;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.3em;
+      margin-bottom: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-section {
+      margin-bottom: 2em;
+    }
+    .radio-option {
+      margin: 0.5em 0;
+    }
+    .submit-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 1em 2em;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+    .disabled-option {
+      color: #999;
+    }
   </style>
 </head>
 <body>
-
   <form action="https://formsubmit.co/info@acubavoy.com" method="POST">
-    <!-- Opciones para FormSubmit -->
-    <input type="hidden" name="_subject" value="Nuevo pedido desde Tienda ACV">
-    <input type="hidden" name="_template" value="box">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" value="https://acubavoy.github.io/dayready_products/gracias.html">
+    <input type="hidden" name="_next" value="https://acubavoy.github.io/dayready_products/agradecimiento.html">
+    <input type="hidden" name="_subject" value="Nuevo Pedido desde el Marketplace de A Cuba Voy">
+    
+    <div class="form-section">
+      <h2>Información del Comprador</h2>
+      <label for="comprador_nombre">Nombre:</label>
+      <input type="text" name="comprador_nombre" required />
 
-    <h2>🧑 Información del Comprador</h2>
-    <label>Nombre:</label><input type="text" name="comprador_nombre" required>
-    <label>Apellidos:</label><input type="text" name="comprador_apellidos" required>
-    <label>Teléfono:</label><input type="text" name="comprador_telefono" required>
-    <label>Email:</label><input type="email" name="comprador_email" required>
-    <label>Código Postal:</label><input type="text" name="comprador_codigo_postal" required>
+      <label for="comprador_apellidos">Apellidos:</label>
+      <input type="text" name="comprador_apellidos" required />
 
-    <h2>🎁 Información del Receptor</h2>
-    <label>Nombre:</label><input type="text" name="receptor_nombre" required>
-    <label>Apellidos:</label><input type="text" name="receptor_apellidos" required>
-    <label>Dirección completa:</label><input type="text" name="receptor_direccion" required>
-    <label>Teléfono:</label><input type="text" name="receptor_telefono" required>
-    <label>Carnet de Identidad:</label><input type="text" name="receptor_carnet" required>
-    <label>¿Puede ser contactado por WhatsApp?</label>
-    <select name="receptor_whatsapp" required>
-      <option value="Sí">Sí</option>
-      <option value="No">No</option>
-    </select>
+      <label for="comprador_email">Correo electrónico:</label>
+      <input type="email" name="comprador_email" required />
 
-    <h2>💳 Forma de Pago</h2>
-    <div class="radio-group">
-      <label><input type="radio" name="forma_pago" value="Pago Cash" required> Pago Cash</label>
-      <label><input type="radio" name="forma_pago" value="Depósito bancario"> Depósito bancario</label>
-      <label><input type="radio" name="forma_pago" value="Pago por Zelle"> Pago por Zelle</label>
-      <label class="disabled"><input type="radio" name="forma_pago" value="Pago por Tarjeta de Crédito" disabled> Pago por Tarjeta de Crédito ⛔</label>
-      <label class="disabled"><input type="radio" name="forma_pago" value="Pago por Paypal" disabled> Pago por Paypal ⛔</label>
+      <label for="comprador_telefono">Teléfono:</label>
+      <input type="tel" name="comprador_telefono" required />
+
+      <label for="comprador_codigo_postal">Código Postal:</label>
+      <input type="text" name="comprador_codigo_postal" required />
     </div>
 
-    <button type="submit">Enviar Pedido</button>
-  </form>
+    <div class="form-section">
+      <h2>Información del Receptor</h2>
+      <label for="receptor_nombre">Nombre:</label>
+      <input type="text" name="receptor_nombre" required />
 
+      <label for="receptor_apellidos">Apellidos:</label>
+      <input type="text" name="receptor_apellidos" required />
+
+      <label for="receptor_direccion">Dirección completa:</label>
+      <input type="text" name="receptor_direccion" required />
+
+      <label for="receptor_telefono">Teléfono:</label>
+      <input type="tel" name="receptor_telefono" required />
+
+      <label for="receptor_carnet">Carnet de Identidad:</label>
+      <input type="text" name="receptor_carnet" required />
+
+      <label for="receptor_whatsapp">¿Puede ser contactado por WhatsApp?</label>
+      <select name="receptor_whatsapp">
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <h2>Forma de Pago</h2>
+      <div class="radio-option"><input type="radio" name="forma_pago" value="Pago Cash" required> Pago Cash</div>
+      <div class="radio-option"><input type="radio" name="forma_pago" value="Depósito bancario"> Depósito bancario</div>
+      <div class="radio-option"><input type="radio" name="forma_pago" value="Pago por Zelle"> Pago por Zelle</div>
+      <div class="radio-option disabled-option"><input type="radio" name="forma_pago" value="Pago por Tarjeta de Crédito" disabled> Pago por Tarjeta de Crédito</div>
+      <div class="radio-option disabled-option"><input type="radio" name="forma_pago" value="Pago por Paypal" disabled> Pago por Paypal</div>
+    </div>
+
+    <button type="submit" class="submit-btn">Enviar Pedido</button>
+  </form>
 </body>
 </html>
